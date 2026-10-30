@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#123d32">
+<title>دفتر المبالغ والمدفوعات</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 16px;
+  font-family: Tahoma, Arial, sans-serif;
+  background: #f2f5f3;
+  color: #20352c;
+}
+
+.container {
+  max-width: 1050px;
+  margin: auto;
+}
+
+header {
+  background: #123d32;
+  color: white;
+  padding: 23px 15px;
+  border-radius: 16px;
+  text-align: center;
+  margin-bottom: 18px;
+}
+
+header h1 {
+  font-size: 25px;
+  margin: 0 0 8px;
+}
+
+header p {
+  margin: 0;
+  font-size: 14px;
+  color: #d8e8df;
+}
+
+.summary {
+  display: grid;
+  grid-template-columns: 1fr 1.35fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.card {
+  background: white;
+  border-radius: 14px;
+  padding: 17px;
+  box-shadow: 0 3px 12px #0000000a;
+  min-width: 0;
+}
+
+.card label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 12px;
+  font-size: 15px;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 13px;
+  font-size: 17px;
+  font-family: inherit;
+  border: 1px solid #cbd8d0;
+  border-radius: 9px;
+  background: #fff;
+  color: #20352c;
+  outline: none;
+}
+
+input:focus, textarea:focus {
+  border-color: #247653;
+}
+
+.balance-card {
+  background: #e0f1e5;
+  border: 2px solid #a8d4b5;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.balance-card label {
+  color: #245c38;
+}
+
+#balance {
+  font-size: clamp(27px, 5vw, 43px);
+  font-weight: bold;
+  color: #176a36;
+  overflow-wrap: anywhere;
+  line-height: 1.4;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.stat {
+  background: white;
+  padding: 15px;
+  border-radius: 12px;
+  text-align: center;
+  border: 1px solid #e2e9e4;
+}
+
+.stat span {
+  display: block;
+  color: #64766b;
+  font-size: 14px;
+  margin-bottom: 9px;
+}
+
+.stat strong {
+  font-size: 21px;
+  overflow-wrap: anywhere;
+}
+
+.section {
+  background: white;
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.section h2 {
+  font-size: 19px;
+  margin: 0 0 15px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 12px;
+}
+
+.field {
+  margin-bottom: 13px;
+}
+
+.field label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.full {
+  grid-column: 1 / -1;
+}
+
+button {
+  border: 0;
+  border-radius: 9px;
+  padding: 13px 16px;
+  font-size: 16px;
+  font-family: inherit;
+  font-weight: bold;
+  cursor: pointer;
+  min-height: 48px;
+}
+
+button:active {
+  transform: scale(.98);
+}
+
+.primary {
+  background: #176744;
+  color: white;
+}
+
+.secondary {
+  background: #e7eee9;
+  color: #214c36;
+}
+
+.danger {
+  background: #fbe9e7;
+  color: #a52b23;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.actions button {
+  flex: 1;
+}
+
+.table-wrap {
+  overflow-x: auto;
+  width: 100%;
+}
+
+table {
+  width: 100%;
+  min-width: 570px;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 13px 10px;
+  border-bottom: 1px solid #e5ebe6;
+  text-align: right;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
+th {
+  background: #edf4ef;
+  color: #244a35;
+  white-space: nowrap;
+}
+
+td.amount {
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.row-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.row-actions button {
+  min-height: 38px;
+  padding: 8px 10px;
+  font-size: 13px;
+}
+
+.empty {
+  padding: 28px 10px;
+  text-align: center;
+  color: #758278;
+}
+
+footer {
+  text-align: center;
+  padding: 15px 5px;
+  font-size: 12px;
+  color: #728077;
+}
+
+@media (max-width: 540px) {
+  body {
+    padding: 9px;
+  }
+
+  header {
+    padding: 20px 10px;
+  }
+
+  header h1 {
+    font-size: 21px;
+  }
+
+  .summary {
+    grid-template-columns: 0.95fr 1.05fr;
+    gap: 8px;
+  }
+
+  .card {
+    padding: 12px;
+  }
+
+  .card label {
+    font-size: 13px;
+  }
+
+  #balance {
+    font-size: clamp(22px, 6vw, 31px);
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .full {
+    grid-column: auto;
+  }
+
+  .section {
+    padding: 12px;
+  }
+
+  .stat {
+    padding: 12px 6px;
+  }
+
+  .stat strong {
+    font-size: 17px;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+
+  .actions button {
+    width: 100%;
+  }
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<header>
+  <h1>دفتر المبالغ والمدفوعات</h1>
+  <p>متابعة المبالغ المطلوبة والمدفوعات والرصيد المتبقي</p>
+</header>
+
+<div class="summary">
+  <div class="card">
+    <label for="total">المبلغ الإجمالي المطلوب</label>
+    <input
+      id="total"
+      type="number"
+      min="0"
+      step="0.01"
+      inputmode="decimal"
+      placeholder="أدخل المبلغ"
+    >
+  </div>
+
+  <div class="card balance-card">
+    <label>الرصيد المتبقي</label>
+    <div id="balance">0.00</div>
+  </div>
+</div>
+
+<div class="stats">
+  <div class="stat">
+    <span>إجمالي المدفوع</span>
+    <strong id="paidTotal">0.00</strong>
+  </div>
+
+  <div class="stat">
+    <span>عدد المسددين</span>
+    <strong id="peopleCount">0</strong>
+  </div>
+</div>
+
+<div class="section">
+  <h2 id="formTitle">إضافة دفعة جديدة</h2>
+
+  <form id="paymentForm">
+    <div class="form-grid">
+
+      <div class="field">
+        <label for="personName">اسم الشخص المسدد</label>
+        <input
+          id="personName"
+          type="text"
+          maxlength="150"
+          placeholder="اكتب اسم الشخص"
+          required
+        >
+      </div>
+
+      <div class="field">
+        <label for="paymentAmount">المبلغ المدفوع</label>
+        <input
+          id="paymentAmount"
+          type="number"
+          min="0.01"
+          step="0.01"
+          inputmode="decimal"
+          placeholder="أدخل المبلغ"
+          required
+        >
+      </div>
+
+      <div class="field full">
+        <label for="notes">ملاحظات (اختياري)</label>
+        <input
+          id="notes"
+          type="text"
+          maxlength="250"
+          placeholder="مثلاً: الدفعة الأولى"
+        >
+      </div>
+
+    </div>
+
+    <div class="actions">
+      <button class="primary" type="submit" id="saveButton">
+        + إضافة الدفعة
+      </button>
+
+      <button
+        class="secondary"
+        type="button"
+        id="cancelEdit"
+        hidden
+      >
+        إلغاء التعديل
+      </button>
+    </div>
+  </form>
+</div>
+
+<div class="section">
+  <h2>سجل الدفعات</h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>اسم الشخص</th>
+          <th>المبلغ</th>
+          <th>ملاحظات</th>
+          <th>الإجراءات</th>
+        </tr>
+      </thead>
+
+      <tbody id="paymentsBody"></tbody>
+    </table>
+  </div>
+
+  <div id="emptyMessage" class="empty">
+    لا توجد دفعات مسجلة حتى الآن.
+  </div>
+
+  <div class="actions">
+    <button class="secondary" id="exportButton" type="button">
+      تصدير نسخة احتياطية
+    </button>
+
+    <button class="secondary" id="importButton" type="button">
+      استعادة نسخة احتياطية
+    </button>
+
+    <button class="secondary" id="printButton" type="button">
+      طباعة السجل
+    </button>
+
+    <input
+      id="importFile"
+      type="file"
+      accept=".json,application/json"
+      hidden
+    >
+  </div>
+</div>
+
+<footer>
+  إعداد و برمجة: وائل دهشان
+</footer>
+
+</div>
+
+<script>
+const STORAGE_KEY = "dahshan_payments_book_v1";
+
+const totalInput = document.getElementById("total");
+const nameInput = document.getElementById("personName");
+const amountInput = document.getElementById("paymentAmount");
+const notesInput = document.getElementById("notes");
+const form = document.getElementById("paymentForm");
+const body = document.getElementById("paymentsBody");
+const emptyMessage = document.getElementById("emptyMessage");
+const saveButton = document.getElementById("saveButton");
+const cancelEditButton = document.getElementById("cancelEdit");
+const formTitle = document.getElementById("formTitle");
+
+let payments = [];
+let editingId = null;
+
+function loadData() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (!saved) return;
+
+    const data = JSON.parse(saved);
+
+    if (!data || !Array.isArray(data.payments)) {
+      throw new Error("بيانات غير صالحة");
+    }
+
+    payments = data.payments
+      .filter(p =>
+        p &&
+        typeof p.id === "string" &&
+        typeof p.name === "string" &&
+        Number.isFinite(p.amount) &&
+        p.amount > 0
+      );
+
+    totalInput.value =
+      Number.isFinite(data.total) && data.total >= 0
+        ? data.total
+        : "";
+  } catch (error) {
+    alert(
+      "تعذر قراءة البيانات المحفوظة. " +
+      "إذا كانت بياناتك مهمة، لا تحذف بيانات المتصفح."
+    );
+  }
+}
+
+function saveData() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+      total: getTotal(),
+      payments: payments
+    }));
+    return true;
+  } catch (error) {
+    alert("تعذر حفظ البيانات. يرجى تصدير نسخة احتياطية.");
+    return false;
+  }
+}
+
+function getTotal() {
+  const value = Number(totalInput.value);
+  return totalInput.value.trim() !== "" &&
+         Number.isFinite(value) &&
+         value >= 0
+    ? value
+    : 0;
+}
+
+function getPaid() {
+  return payments.reduce((sum, p) => sum + p.amount, 0);
+}
+
+function money(value) {
+  return value.toLocaleString("en-US", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+}
+
+function makeCell(text, className) {
+  const td = document.createElement("td");
+  td.textContent = text;
+  if (className) td.className = className;
+  return td;
+}
+
+function render() {
+  const total = getTotal();
+  const paid = getPaid();
+  const balance = total - paid;
+
+  document.getElementById("balance").textContent = money(balance);
+  document.getElementById("paidTotal").textContent = money(paid);
+  document.getElementById("peopleCount").textContent = payments.length;
+
+  document.getElementById("balance").style.color =
+    balance < 0 ? "#b42318" : "#176a36";
+
+  body.replaceChildren();
+  emptyMessage.hidden = payments.length > 0;
+
+  payments.forEach((payment, index) => {
+    const tr = document.createElement("tr");
+
+    tr.appendChild(makeCell(String(index + 1)));
+    tr.appendChild(makeCell(payment.name));
+    tr.appendChild(makeCell(money(payment.amount), "amount"));
+    tr.appendChild(makeCell(payment.notes || "—"));
+
+    const actionsCell = document.createElement("td");
+    const actions = document.createElement("div");
+    actions.className = "row-actions";
+
+    const editButton = document.createElement("button");
+    editButton.type = "button";
+    editButton.className = "secondary";
+    editButton.textContent = "تعديل";
+    editButton.addEventListener("click", () => startEdit(payment.id));
+
+    const deleteButton = document.createElement("button");
+    deleteButton.type = "button";
+    deleteButton.className = "danger";
+    deleteButton.textContent = "حذف";
+    deleteButton.addEventListener("click", () => deletePayment(payment.id));
+
+    actions.append(editButton, deleteButton);
+    actionsCell.appendChild(actions);
+    tr.appendChild(actionsCell);
+
+    body.appendChild(tr);
+  });
+}
+
+function resetForm() {
+  editingId = null;
+  form.reset();
+  formTitle.textContent = "إضافة دفعة جديدة";
+  saveButton.textContent = "+ إضافة الدفعة";
+  cancelEditButton.hidden = true;
+}
+
+form.addEventListener("submit", function(event) {
+  event.preventDefault();
+
+  const name = nameInput.value.trim();
+  const amountText = amountInput.value.trim();
+  const amount = Number(amountText);
+  const notes = notesInput.value.trim();
+
+  if (!name) {
+    alert("يرجى كتابة اسم الشخص.");
+    nameInput.focus();
+    return;
+  }
+
+  if (!amountText || !Number.isFinite(amount) || amount <= 0) {
+    alert("يرجى إدخال مبلغ أكبر من صفر.");
+    amountInput.focus();
+    return;
+  }
+
+  if (editingId !== null) {
+    const index = payments.findIndex(p => p.id === editingId);
+    if (index === -1) {
+      resetForm();
+      render();
+      return;
+    }
+
+    payments[index] = {
+      ...payments[index],
+      name,
+      amount,
+      notes
+    };
+  } else {
+    payments.push({
+      id: createId(),
+      name,
+      amount,
+      notes
+    });
+  }
+
+  if (saveData()) {
+    resetForm();
+    render();
+  }
+});
+
+function createId() {
+  if (window.crypto && typeof window.crypto.randomUUID === "function") {
+    return window.crypto.randomUUID();
+  }
+  return Date.now().toString(36) +
+    Math.random().toString(36).slice(2);
+}
+
+function startEdit(id) {
+  const payment = payments.find(p => p.id === id);
+  if (!payment) return;
+
+  editingId = id;
+  nameInput.value = payment.name;
+  amountInput.value = payment.amount;
+  notesInput.value = payment.notes || "";
+
+  formTitle.textContent = "تعديل بيانات الدفعة";
+  saveButton.textContent = "حفظ التعديلات";
+  cancelEditButton.hidden = false;
+
+  form.scrollIntoView({ behavior: "smooth", block: "start" });
+  nameInput.focus();
+}
+
+function deletePayment(id) {
+  const payment = payments.find(p => p.id === id);
+  if (!payment) return;
+
+  if (!confirm("هل تريد حذف دفعة " + payment.name + "؟")) {
+    return;
+  }
+
+  const oldPayments = payments;
+  payments = payments.filter(p => p.id !== id);
+
+  if (!saveData()) {
+    payments = oldPayments;
+    return;
+  }
+
+  if (editingId === id) resetForm();
+  render();
+}
+
+cancelEditButton.addEventListener("click", resetForm);
+
+totalInput.addEventListener("input", render);
+totalInput.addEventListener("change", () => {
+  const value = totalInput.value.trim();
+
+  if (value !== "" &&
+      (!Number.isFinite(Number(value)) || Number(value) < 0)) {
+    alert("المبلغ الإجمالي يجب ألا يكون سالبًا.");
+    totalInput.value = "";
+  }
+
+  saveData();
+  render();
+});
+
+document.getElementById("exportButton").addEventListener("click", () => {
+  const data = JSON.stringify({
+    total: getTotal(),
+    payments: payments
+  }, null, 2);
+
+  const blob = new Blob([data], {
+    type: "application/json;charset=utf-8"
+  });
+
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "نسخة-دفتر-المدفوعات.json";
+  link.click();
+
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+});
+
+document.getElementById("importButton").addEventListener("click", () => {
+  document.getElementById("importFile").click();
+});
+
+document.getElementById("importFile").addEventListener("change", async event => {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  try {
+    const data = JSON.parse(await file.text());
+
+    if (
+      !data ||
+      !Number.isFinite(data.total) ||
+      data.total < 0 ||
+      !Array.isArray(data.payments) ||
+      !data.payments.every(p =>
+        p &&
+        typeof p.name === "string" &&
+        Number.isFinite(p.amount) &&
+        p.amount > 0
+      )
+    ) {
+      throw new Error("ملف غير صالح");
+    }
+
+    if (!confirm("ستُستبدل البيانات الحالية بالنسخة المختارة. هل تريد المتابعة؟")) {
+      event.target.value = "";
+      return;
+    }
+
+    const imported = data.payments.map(p => ({
+      id: createId(),
+      name: p.name,
+      amount: p.amount,
+      notes: typeof p.notes === "string" ? p.notes : ""
+    }));
+
+    const previousPayments = payments;
+    const previousTotal = totalInput.value;
+
+    payments = imported;
+    totalInput.value = data.total;
+
+    if (saveData()) {
+      resetForm();
+      render();
+      alert("تمت استعادة النسخة الاحتياطية.");
+    } else {
+      payments = previousPayments;
+      totalInput.value = previousTotal;
+      render();
+    }
+  } catch (error) {
+    alert("تعذر استيراد الملف. تأكد أنه نسخة احتياطية صحيحة.");
+  }
+
+  event.target.value = "";
+});
+
+document.getElementById("printButton").addEventListener("click", () => {
+  window.print();
+});
+
+loadData();
+render();
+</script>
+
+<style>
+@media print {
+  body {
+    background: white;
+    padding: 0;
+  }
+
+  header {
+    background: white;
+    color: black;
+    border: 1px solid #777;
+  }
+
+  header p {
+    color: black;
+  }
+
+  .section form,
+  .actions,
+  .row-actions,
+  footer {
+    display: none !important;
+  }
+
+  .card, .stat, .section {
+    box-shadow: none;
+    border: 1px solid #ddd;
+    break-inside: avoid;
+  }
+
+  .table-wrap {
+    overflow: visible;
+  }
+
+  table {
+    min-width: 0;
+  }
+}
+</style>
+</body>
+</html>
