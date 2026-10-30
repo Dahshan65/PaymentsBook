@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- الخلفية -->
+    <path
+        android:fillColor="#123D32"
+        android:pathData="M24,0 H84 Q108,0 108,24 V84 Q108,108 84,108 H24 Q0,108 0,84 V24 Q0,0 24,0 Z" />
+
+    <!-- حرف Z -->
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M16,39 H32 L16,69 H32" />
+
+    <!-- حرف A -->
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M36,69 L44,39 L52,69 M39,59 H49" />
+
+    <!-- حرف K -->
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M57,39 V69 M72,39 L57,56 M62,52 L72,69" />
+
+    <!-- حرف A -->
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M76,69 L84,39 L92,69 M79,59 H89" />
+
+    <!-- خط ذهبي -->
+    <path
+        android:strokeColor="#E0B84C"
+        android:strokeWidth="3"
+        android:strokeLineCap="round"
+        android:pathData="M16,80 H92" />
+
+</vector>
